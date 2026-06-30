@@ -31,8 +31,8 @@ from utils import setup_logger
 # Initialize logger
 logger = setup_logger("web_app")
 
-# Create Flask application
-app = Flask(__name__)
+# Create Flask application (templates/ is at the project root)
+app = Flask(__name__, template_folder=Path(__file__).parent / "templates")
 app.secret_key = "sarvam-voice-agent-secret-key"
 
 # Global instances (initialized on first use)
