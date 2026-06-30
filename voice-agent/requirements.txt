@@ -4,17 +4,17 @@
 #
 # Python version: 3.11+
 
+# Web framework for the UI
+flask>=3.0.0
+
 # HTTP client for API requests (STT, LLM, TTS)
 requests>=2.31.0
 
 # Environment variable management (.env file loading)
 python-dotenv>=1.0.0
 
-# Audio recording from microphone
-sounddevice>=0.4.6
-
-# Audio file I/O (saving/loading WAV files)
+# Audio file I/O (saving/loading WAV files) - Required for API-based audio processing
 scipy>=1.11.0
 
-# Numerical operations (audio data processing)
+# Numerical operations (audio data processing) - Required for API-based audio handling
 numpy>=1.24.0

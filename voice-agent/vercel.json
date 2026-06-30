@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "web_app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "web_app.py"
+    }
+  ],
+  "env": {
+    "SARVAM_API_KEY": "@sarvam-api-key",
+    "STT_LANGUAGE": "unknown",
+    "TTS_LANGUAGE": "en-IN",
+    "TTS_SPEAKER": "shubh",
+    "LLM_MODEL": "sarvam-30b"
+  }
+}

@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Sarvam Voice Agent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: #eff6ff;
+            --surface: #ffffff;
+            --surface-secondary: #f8fafc;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --success-light: #ecfdf5;
+            --success-border: #a7f3d0;
+            --danger: #ef4444;
+            --danger-light: #fef2f2;
+            --danger-border: #fecaca;
+            --warning: #f59e0b;
+            --warning-light: #fffbeb;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--surface-secondary);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .logo-text {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--surface-secondary);
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* Main Layout */
+        .main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .page-title {
+            margin-bottom: 24px;
+        }
+
+        .page-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .page-title p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 280px;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .toast.success {
+            background: var(--success-light);
+            border: 1px solid var(--success-border);
+            color: var(--success);
+        }
+
+        .toast.error {
+            background: var(--danger-light);
+            border: 1px solid var(--danger-border);
+            color: var(--danger);
+        }
+
+        /* Card */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* API Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .status-badge.configured {
+            background: var(--success-light);
+            color: var(--success);
+            border: 1px solid var(--success-border);
+        }
+
+        .status-badge.not-configured {
+            background: var(--danger-light);
+            color: var(--danger);
+            border: 1px solid var(--danger-border);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .status-badge.configured .status-dot {
+            background: var(--success);
+        }
+
+        .status-badge.not-configured .status-dot {
+            background: var(--danger);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--surface);
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text-primary);
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+        }
+
+        .form-select option {
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+
+        /* Range Slider */
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .range-input {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+        }
+
+        .range-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .range-value {
+            min-width: 40px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--surface-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-light);
+        }
+
+        .btn-danger {
+            background: var(--danger-light);
+            color: var(--danger);
+            border: 1px solid var(--danger-border);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        /* Input Group with Icon */
+        .input-group {
+            position: relative;
+        }
+
+        .input-group .form-input {
+            padding-right: 44px;
+        }
+
+        .input-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-toggle:hover {
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .main {
+                padding: 20px 16px;
+            }
+
+            .header {
+                padding: 0 16px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .toast-container {
+                right: 16px;
+                left: 16px;
+            }
+
+            .toast {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">S</div>
+            <span class="logo-text">Sarvam Voice Agent</span>
+        </div>
+        <nav class="nav-links">
+            <a href="/" class="nav-link">Chat</a>
+            <a href="/settings" class="nav-link active">Settings</a>
+        </nav>
+    </header>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <main class="main">
+        <div class="page-title">
+            <h1>Settings</h1>
+            <p>Configure your voice agent preferences</p>
+        </div>
+
+        <!-- API Configuration -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="card-title">API Configuration</div>
+                    <div class="card-subtitle">Connect to Sarvam AI services</div>
+                </div>
+            </div>
+
+            <div id="apiStatus" class="status-badge not-configured">
+                <span class="status-dot"></span>
+                <span id="apiStatusText">Checking status...</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="apiKey">Sarvam API Key</label>
+                <div class="input-group">
+                    <input 
+                        type="password" 
+                        id="apiKey" 
+                        class="form-input" 
+                        placeholder="Enter your API key (starts with sk_)"
+                    >
+                    <button class="input-toggle" onclick="toggleApiKeyVisibility()" title="Show/hide key">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="form-hint">Get your key from <a href="https://dashboard.sarvam.ai" target="_blank">dashboard.sarvam.ai</a></p>
+            </div>
+        </div>
+
+        <!-- Voice Settings -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="22"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="card-title">Voice Settings</div>
+                    <div class="card-subtitle">Customize speech recognition and synthesis</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="ttsSpeaker">Speaker Voice</label>
+                <select id="ttsSpeaker" class="form-select">
+                    <optgroup label="Male Voices">
+                        <option value="shubh">Shubh (Default)</option>
+                        <option value="aditya">Aditya</option>
+                        <option value="rohan">Rohan</option>
+                        <option value="anand">Anand</option>
+                        <option value="rahul">Rahul</option>
+                        <option value="amit">Amit</option>
+                        <option value="dev">Dev</option>
+                        <option value="kabir">Kabir</option>
+                        <option value="vijay">Vijay</option>
+                        <option value="sumit">Sumit</option>
+                        <option value="ratan">Ratan</option>
+                        <option value="varun">Varun</option>
+                        <option value="manan">Manan</option>
+                        <option value="aayan">Aayan</option>
+                        <option value="ashutosh">Ashutosh</option>
+                        <option value="advait">Advait</option>
+                        <option value="tarun">Tarun</option>
+                        <option value="sunny">Sunny</option>
+                        <option value="mani">Mani</option>
+                        <option value="gokul">Gokul</option>
+                        <option value="mohit">Mohit</option>
+                        <option value="rehan">Rehan</option>
+                        <option value="soham">Soham</option>
+                    </optgroup>
+                    <optgroup label="Female Voices">
+                        <option value="priya">Priya</option>
+                        <option value="simran">Simran</option>
+                        <option value="kavya">Kavya</option>
+                        <option value="ishita">Ishita</option>
+                        <option value="ritu">Ritu</option>
+                        <option value="neha">Neha</option>
+                        <option value="pooja">Pooja</option>
+                        <option value="shreya">Shreya</option>
+                        <option value="roopa">Roopa</option>
+                        <option value="tanya">Tanya</option>
+                        <option value="shruti">Shruti</option>
+                        <option value="suhani">Suhani</option>
+                        <option value="kavitha">Kavitha</option>
+                        <option value="rupali">Rupali</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="ttsLanguage">Language</label>
+                <select id="ttsLanguage" class="form-select">
+                    <option value="unknown">Auto-detect</option>
+                    <option value="en-IN">English (India)</option>
+                    <option value="hi-IN">Hindi</option>
+                    <option value="bn-IN">Bengali</option>
+                    <option value="ta-IN">Tamil</option>
+                    <option value="te-IN">Telugu</option>
+                    <option value="gu-IN">Gujarati</option>
+                    <option value="kn-IN">Kannada</option>
+                    <option value="ml-IN">Malayalam</option>
+                    <option value="mr-IN">Marathi</option>
+                    <option value="pa-IN">Punjabi</option>
+                    <option value="od-IN">Odia</option>
+                </select>
+                <p class="form-hint">Language for speech recognition and synthesis</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="ttsSampleRate">Audio Quality</label>
+                <select id="ttsSampleRate" class="form-select">
+                    <option value="8000">8,000 Hz - Phone quality</option>
+                    <option value="16000">16,000 Hz - Good quality</option>
+                    <option value="22050">22,050 Hz - High quality</option>
+                    <option value="24000" selected>24,000 Hz - Premium (Recommended)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- AI Settings -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="10" rx="2"/>
+                        <circle cx="12" cy="5" r="2"/>
+                        <path d="M12 7v4"/>
+                        <line x1="8" y1="16" x2="8" y2="16"/>
+                        <line x1="16" y1="16" x2="16" y2="16"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="card-title">AI Settings</div>
+                    <div class="card-subtitle">Configure the language model behavior</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="systemPrompt">System Prompt</label>
+                <textarea id="systemPrompt" class="form-textarea" rows="3">You are a helpful, friendly voice assistant. Keep your responses concise and conversational.</textarea>
+                <p class="form-hint">Defines the AI personality and behavior</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="llmTemperature">Temperature: <span id="tempValue">0.7</span></label>
+                <div class="range-container">
+                    <input 
+                        type="range" 
+                        id="llmTemperature" 
+                        class="range-input"
+                        min="0" 
+                        max="2" 
+                        step="0.1" 
+                        value="0.7"
+                        oninput="document.getElementById('tempValue').textContent = this.value"
+                    >
+                    <span class="range-value" id="tempDisplay">0.7</span>
+                </div>
+                <p class="form-hint">Lower = more focused and deterministic, Higher = more creative and varied</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="llmMaxTokens">Maximum Response Length</label>
+                <input 
+                    type="number" 
+                    id="llmMaxTokens" 
+                    class="form-input" 
+                    value="1000" 
+                    min="100" 
+                    max="4000"
+                    style="max-width: 160px;"
+                >
+                <p class="form-hint">Maximum number of tokens in the AI response (100-4000)</p>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="saveSettings()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                    <polyline points="17 21 17 13 7 13 7 21"/>
+                    <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                Save Settings
+            </button>
+            <button class="btn btn-secondary" onclick="clearHistory()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+                Clear History
+            </button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Powered by <a href="https://docs.sarvam.ai" target="_blank">Sarvam AI</a></p>
+    </footer>
+
+    <script>
+        // Load settings on page load
+        document.addEventListener('DOMContentLoaded', loadSettings);
+
+        async function loadSettings() {
+            try {
+                const response = await fetch('/api/config');
+                const data = await response.json();
+
+                if (data.success) {
+                    const config = data.config;
+
+                    // Update API status
+                    const statusBadge = document.getElementById('apiStatus');
+                    const statusText = document.getElementById('apiStatusText');
+                    if (config.has_api_key) {
+                        statusBadge.className = 'status-badge configured';
+                        statusText.textContent = 'API Key configured';
+                    } else {
+                        statusBadge.className = 'status-badge not-configured';
+                        statusText.textContent = 'API Key not configured';
+                    }
+
+                    // Set form values
+                    document.getElementById('ttsSpeaker').value = config.tts_speaker;
+                    document.getElementById('ttsLanguage').value = config.tts_language;
+                    document.getElementById('ttsSampleRate').value = config.tts_sample_rate;
+                    document.getElementById('systemPrompt').value = config.system_prompt;
+                    document.getElementById('llmTemperature').value = config.llm_temperature;
+                    document.getElementById('tempValue').textContent = config.llm_temperature;
+                    document.getElementById('tempDisplay').textContent = config.llm_temperature;
+                    document.getElementById('llmMaxTokens').value = config.llm_max_tokens;
+                }
+            } catch (error) {
+                showToast('Failed to load settings', 'error');
+            }
+        }
+
+        async function saveSettings() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+
+            const payload = {
+                api_key: apiKey || undefined,
+                tts_speaker: document.getElementById('ttsSpeaker').value,
+                tts_language: document.getElementById('ttsLanguage').value,
+                tts_sample_rate: parseInt(document.getElementById('ttsSampleRate').value),
+                system_prompt: document.getElementById('systemPrompt').value,
+                llm_temperature: parseFloat(document.getElementById('llmTemperature').value),
+                llm_max_tokens: parseInt(document.getElementById('llmMaxTokens').value),
+            };
+
+            try {
+                const response = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Settings saved successfully', 'success');
+                    loadSettings();
+                } else {
+                    showToast(data.error || 'Failed to save', 'error');
+                }
+            } catch (error) {
+                showToast('Failed to save: ' + error.message, 'error');
+            }
+        }
+
+        async function clearHistory() {
+            if (!confirm('Clear all conversation history? This cannot be undone.')) return;
+
+            try {
+                const response = await fetch('/api/clear-history', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Conversation history cleared', 'success');
+                } else {
+                    showToast(data.error || 'Failed to clear', 'error');
+                }
+            } catch (error) {
+                showToast('Failed: ' + error.message, 'error');
+            }
+        }
+
+        function toggleApiKeyVisibility() {
+            const input = document.getElementById('apiKey');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    ${type === 'success' 
+                        ? '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'
+                        : '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>'}
+                </svg>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
