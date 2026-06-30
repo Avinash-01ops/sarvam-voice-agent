@@ -85,9 +85,18 @@ def get_tts():
     return tts
 
 
+@app.route("/health")
+def health():
+    """Health check endpoint for Vercel."""
+    return jsonify({"status": "ok", "message": "Sarvam Voice Agent is running"})
+
+
 @app.route("/")
 def index():
     """Serve the main chat page."""
+    config = load_config()
+    if not config.get("SARVAM_API_KEY"):
+        return render_template("index.html", setup_required=True)
     return render_template("index.html")
 
 

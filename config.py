@@ -44,14 +44,9 @@ def load_config():
     sarvam_api_key = os.getenv("SARVAM_API_KEY")
 
     if not sarvam_api_key:
-        print("=" * 60)
-        print("ERROR: SARVAM_API_KEY is not set!")
-        print("=" * 60)
-        print("\nPlease create a .env file in the project root with:")
-        print('  SARVAM_API_KEY="your-api-key-here"')
-        print("\nYou can get an API key from: https://dashboard.sarvam.ai")
-        print("=" * 60)
-        sys.exit(1)
+        # Return a minimal config that will fail gracefully at runtime
+        # rather than crashing the serverless function on import
+        print("WARNING: SARVAM_API_KEY is not set! Set it in Vercel dashboard.")
 
     # --- Optional Configuration with Defaults ---
     # These values have sensible defaults but can be overridden via .env

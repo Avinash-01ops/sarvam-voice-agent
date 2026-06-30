@@ -7,6 +7,9 @@
 # Web framework for the UI
 flask>=3.0.0
 
+# Production WSGI server (required by Vercel Python runtime)
+gunicorn>=21.2.0
+
 # HTTP client for API requests (STT, LLM, TTS)
 requests>=2.31.0
 

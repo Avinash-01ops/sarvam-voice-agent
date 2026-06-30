@@ -27,6 +27,8 @@ Dependencies:
 
 import base64
 import json
+import os
+import tempfile
 
 import requests
 
@@ -139,6 +141,15 @@ class TextToSpeech:
         """
         # Use configured output path if not specified
         output_path = output_path or config["OUTPUT_AUDIO_PATH"]
+
+        # Ensure the output directory is writable (serverless envs like Vercel
+        # have read-only filesystems except for /tmp)
+        output_dir = os.path.dirname(os.path.abspath(output_path))
+        if not os.access(output_dir, os.W_OK):
+            output_path = os.path.join(tempfile.gettempdir(), "response.wav")
+            logger.warning(
+                f"Original output directory not writable, using temp path: {output_path}"
+            )
 
         # Step 1: Validate input text
         if not text or not text.strip():
