@@ -1,0 +1,20 @@
+# Sarvam Voice Agent - Python Dependencies
+# =========================================
+# Install with: pip install -r requirements.txt
+#
+# Python version: 3.11+
+
+# HTTP client for API requests (STT, LLM, TTS)
+requests>=2.31.0
+
+# Environment variable management (.env file loading)
+python-dotenv>=1.0.0
+
+# Audio recording from microphone
+sounddevice>=0.4.6
+
+# Audio file I/O (saving/loading WAV files)
+scipy>=1.11.0
+
+# Numerical operations (audio data processing)
+numpy>=1.24.0
